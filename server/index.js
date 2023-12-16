@@ -12,7 +12,7 @@ dotenv.config();
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = 'https://spotify-web-player4-e6986082e2bd.herokuapp.com/auth/callback';
+var spotify_redirect_uri = 'https://spotify-web-player4-e6986082e2bd.herokuapp.com';
 
 var generateRandomString = function (length) {
   var text = '';

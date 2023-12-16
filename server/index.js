@@ -37,8 +37,9 @@ app.get('/auth/login', (req, res) => {
     redirect_uri: spotify_redirect_uri,
     state: state
   })
-
+  console.log("before");
   res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
+  console.log("after");
 })
 
 app.get('/auth/callback', (req, res) => {

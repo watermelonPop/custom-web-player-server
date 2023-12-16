@@ -25,6 +25,10 @@ var generateRandomString = function (length) {
 
 var app = express();
 
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+});
+
 app.get('/auth/login', (req, res) => {
 
   var scope = "streaming user-read-email user-read-private"

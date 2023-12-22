@@ -12,7 +12,7 @@ dotenv.config();
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = 'https://spotify-web-player-server-5f57396ce647.herokuapp.com/auth/callback';
+var spotify_redirect_uri = 'https://spotify-web-player-server.glitch.me/auth/callback';
 
 var generateRandomString = function (length) {
   var text = '';
@@ -66,7 +66,7 @@ app.get('/auth/callback', (req, res) => {
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       access_token = body.access_token;
-      res.redirect('https://spotify-web-player4-e6986082e2bd.herokuapp.com');
+      res.redirect('https://spotify-web-player-seven.vercel.app/');
     }
   });
 });

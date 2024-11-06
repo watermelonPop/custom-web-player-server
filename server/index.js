@@ -65,8 +65,10 @@ app.get('/auth/callback', (req, res) => {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
+      console.log("HELLO");
       access_token = body.access_token;
-      res.redirect('http://localhost:3000');
+      console.log("ACCES: " + access_token);
+      res.redirect('https://custom-spotify-player-5pzdijky8-watermelonpops-projects.vercel.app');
     }
   });
 });

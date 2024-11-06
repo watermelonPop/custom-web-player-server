@@ -66,7 +66,7 @@ app.get('/auth/callback', (req, res) => {
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       access_token = body.access_token;
-      res.redirect('https://spotify-web-player-seven.vercel.app/');
+      res.redirect('http://localhost:3000');
     }
   });
 });

@@ -12,7 +12,7 @@ dotenv.config();
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = 'https://spotify-web-player-server.glitch.me/auth/callback';
+var spotify_redirect_uri = 'https://custom-web-player-server.glitch.me/auth/callback';
 
 var generateRandomString = function (length) {
   var text = '';
@@ -65,10 +65,8 @@ app.get('/auth/callback', (req, res) => {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log("HELLO");
       access_token = body.access_token;
-      console.log("ACCES: " + access_token);
-      res.redirect('https://custom-spotify-player-5pzdijky8-watermelonpops-projects.vercel.app');
+      res.redirect('https://custom-spotify-player-1c5cyxzad-watermelonpops-projects.vercel.app/');
     }
   });
 });

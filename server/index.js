@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('request');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const SpotifWebAPI = require("spotify-web-api-node");
 
 const port = process.env.PORT || 4000;
 
@@ -12,7 +13,7 @@ dotenv.config();
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = 'https://custom-web-player-server.glitch.me/auth/callback';
+var spotify_redirect_uri = 'https://custom-web-player-server.glitch.me/login';
 
 var generateRandomString = function (length) {
   var text = '';
@@ -26,54 +27,54 @@ var generateRandomString = function (length) {
 
 var app = express();
 app.use(cors());
+app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.get('/auth/login', (req, res) => {
-  var scope = 'streaming user-read-email user-read-private';
-  var state = generateRandomString(16);
 
-  var auth_query_parameters = new URLSearchParams({
-    response_type: 'code',
-    client_id: spotify_client_id,
-    scope: scope,
-    redirect_uri: spotify_redirect_uri,
-    state: state,
+app.post('/login', (req, res) => {
+  const code = req.body.code;
+  const spotifyApi = new SpotifWebAPI({
+    redirectUri: spotify_redirect_uri,
+    clientId: "4eb7fa6a3b80412595f5ef4932d67cfd",
+    clientSecret: "7fd3931d8cb04d4fb6850b1268de40bc",
   });
-
-  res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
+  spotifyApi
+    .authorizationCodeGrant(code)
+    .then((data) => {
+      res.json({
+        accessToken: data.body.access_token,
+        refreshToken: data.body.refresh_token,
+        expiresIn: data.body.expires_in,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400);
+    });
 });
 
-app.get('/auth/callback', (req, res) => {
-  var code = req.query.code;
-
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    form: {
-      code: code,
-      redirect_uri: spotify_redirect_uri,
-      grant_type: 'authorization_code',
-    },
-    headers: {
-      Authorization: 'Basic ' + Buffer.from(spotify_client_id + ':' + spotify_client_secret).toString('base64'),
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    json: true,
-  };
-
-  request.post(authOptions, function (error, response, body) {
-    if (!error && response.statusCode === 200) {
-      access_token = body.access_token;
-      res.redirect('https://custom-spotify-player-1c5cyxzad-watermelonpops-projects.vercel.app/');
-    }
+app.post("/refresh", (req, res) => {
+  const refreshToken = req.body.refreshToken;
+  const spotifyApi = new SpotifWebAPI({
+    redirectUri: redirectUri,
+    clientId: "clientId",
+    clientSecret: "clientSecret",
+    refreshToken,
   });
+  spotifyApi
+    .refreshAccessToken()
+    .then((data) => {
+      console.log(data.body);
+    })
+    .catch(() => {
+      res.status(400);
+    });
 });
 
-app.get('/auth/token', (req, res) => {
-  res.json({ access_token: access_token });
-});
+
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);

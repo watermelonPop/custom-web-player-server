@@ -3,6 +3,7 @@ const request = require('request');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const SpotifWebAPI = require("spotify-web-api-node");
+const bodyParser = require('body-parser');
 
 const port = process.env.PORT || 4000;
 
